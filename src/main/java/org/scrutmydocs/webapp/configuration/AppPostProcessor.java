@@ -25,31 +25,31 @@ public class AppPostProcessor implements
 	@Autowired DocumentService documentService;
 	@Autowired AdminFSRiverService fsRiverService;
 	@Autowired Client client;
-	
+
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		// We only inject beans when we start the Root applicationContext, aka there's no parent!
 		if (event.getApplicationContext().getParent() == null) {
 			try {
-				logger.warn("TODO : remove automatic river creation. Just here for example purpose! See org.scrutmydocs.webapp.configuration.AppPostProcessor.");
+//				logger.warn("TODO : remove automatic river creation. Just here for example purpose! See org.scrutmydocs.webapp.configuration.AppPostProcessor.");
 
                 // We clean what exists already as it's a demo
-                try {
-                    client.admin().indices().prepareDelete("_river").get();
-                } catch (IndexMissingException e) {
-                }
-                try {
-                    client.admin().indices().prepareDelete(SMDSearchProperties.INDEX_NAME).get();
-                } catch (IndexMissingException e) {
-                }
-                try {
-                    client.admin().indices().prepareDelete(SMDSearchProperties.ES_META_INDEX).get();
-                } catch (IndexMissingException e) {
-                }
+//                try {
+//                    client.admin().indices().prepareDelete("_river").get();
+//                } catch (IndexMissingException e) {
+//                }
+//                try {
+//                    client.admin().indices().prepareDelete(SMDSearchProperties.INDEX_NAME).get();
+//                } catch (IndexMissingException e) {
+//                }
+//                try {
+//                    client.admin().indices().prepareDelete(SMDSearchProperties.ES_META_INDEX).get();
+//                } catch (IndexMissingException e) {
+//                }
 
 				// We create the default mapping
 				ESHelper.createIndexIfNeeded(client);
-				
+
 				// We are going to create two filesystem rivers
 //				fsRiverService.start(new FSRiver("myfirstriver", SMDSearchProperties.INDEX_NAME, SMDSearchProperties.INDEX_TYPE_DOC, "Scan tmp dir", FsRiver.PROTOCOL.LOCAL, null, null, null, "/tmp_es", 30L, null, null, "standard", true));
 //				fsRiverService.start(new FSRiver("mysecondriver", SMDSearchProperties.INDEX_NAME, SMDSearchProperties.INDEX_TYPE_DOC, "Scan second dir", FsRiver.PROTOCOL.LOCAL, null, null, null, "/tmp_es_second", 30L, null, null, "standard", false));
@@ -62,7 +62,7 @@ public class AppPostProcessor implements
 			}
 		}
 	}
-	
+
 	private void pushSampleDoc(String docname) {
 		String content;
 		try {
@@ -73,7 +73,7 @@ public class AppPostProcessor implements
 		} catch (Exception e) {
 			logger.error("Error while pushing sample doc {}", e, docname);
 		}
-		
+
 	}
-	
+
 }

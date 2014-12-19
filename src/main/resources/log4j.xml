@@ -9,7 +9,7 @@
 
 <!-- $Id: log4j.xml,v 1.10 2011/03/11 16:42:42 pilato Exp $ -->
 
-<!-- | For more configuration information and examples see the Jakarta Log4j 
+<!-- | For more configuration information and examples see the Jakarta Log4j
 	| owebsite: http://jakarta.apache.org/log4j -->
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
@@ -41,7 +41,7 @@
 	</category>
 
 	<category name="org.elasticsearch">
-		<priority value="ERROR" />
+		<priority value="DEBUG" />
 	</category>
 
 	<category name="org.springframework">
@@ -52,11 +52,11 @@
 	<category name="org.apache">
 		<priority value="ERROR" />
 	</category>
-	
+
 	<!-- category name="org.springframework.web">
 		<priority value="DEBUG" />
 	</category-->
-	
+
 
 	<!-- ======================= -->
 	<!-- Setup the Root category -->

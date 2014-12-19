@@ -33,6 +33,7 @@ import org.elasticsearch.search.highlight.HighlightField;
 import org.scrutmydocs.webapp.api.search.data.Hit;
 import org.scrutmydocs.webapp.api.search.data.SearchResponse;
 import org.scrutmydocs.webapp.api.settings.rivers.AbstractRiverHelper;
+import org.scrutmydocs.webapp.constant.SMDSearchProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -133,7 +134,7 @@ public class SearchService {
 	/**
 	 * Autocomplete TODO Create multifield mapping with edge n gram TODO Search
 	 * and create facets
-	 * 
+	 *
 	 * @param query
 	 * @return
 	 */
@@ -168,9 +169,24 @@ public class SearchService {
 
     public String[] getSearchableIndexes(){
         List<String> indexList = new ArrayList<String>();
-        indexList.add(INDEX_NAME);
+//        indexList.add(INDEX_NAME);
+//        indexList.add("haha");
+
+        org.elasticsearch.action.search.SearchResponse searchHits = esClient
+                .prepareSearch()
+                .setIndices(SMDSearchProperties.ES_META_INDEX)
+                .setTypes(SMDSearchProperties.ES_META_RIVERS)
+                .addFacet(
+                        termsFacet("myindex").field("index"))
+                .execute().actionGet();
+
+        TermsFacet terms = searchHits.getFacets().facet("myindex");
+        for (Entry entry : terms.getEntries()) {
+            indexList.add(entry.getTerm().string());
+        }
         String[] indexArr = new String[indexList.size()];
         indexArr = indexList.toArray(indexArr);
+        if (logger.isDebugEnabled()) logger.debug("/getSearchableIndexes()={}", indexList);
         return indexArr;
     }
 
