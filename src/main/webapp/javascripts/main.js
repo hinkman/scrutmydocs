@@ -20,6 +20,8 @@ $(function() {
         }
     };
 
+    initIndexes();
+
 	// Focus on Search
 	$("input.search-query").focus();
 });
@@ -29,19 +31,22 @@ $(function() {
 var searchSize=10;
 var doSearch = function(e) {
 	var query = $("input[name=q]").val();
-	doSearchPage(query,0);
+    var indexname = $("select[name=ils]").val();
+//    console.log(indexname+'   '+query);
+	doSearchPage(indexname,query,0);
 
 	// stop the event
 	e.preventDefault();
 	return false;
 };
 var lastData;
-var doSearchPage = function(query, from) {
+var doSearchPage = function(index, query, from) {
 	// Parameters
 	var data ={
 		first: from,
 		pageSize: searchSize,
-		search: query
+		search: query,
+        index: index
 	};
 	// Rest
 	lastData = data;
@@ -86,7 +91,7 @@ var handleSearchResults = function(data) {
         $("#results-row").hide();
         $("#results-pagination").hide();
     }
-	
+
 	// Display hits
 	$("#results").empty();
 	if (json.hits) {

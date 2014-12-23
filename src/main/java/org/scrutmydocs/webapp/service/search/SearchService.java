@@ -55,9 +55,9 @@ public class SearchService {
 
 	private ESLogger logger = Loggers.getLogger(getClass().getName());
 
-	public SearchResponse google(String search, int first, int pageSize) {
+	public SearchResponse google(String search, int first, int pageSize, String index) {
 		if (logger.isDebugEnabled())
-			logger.debug("google('{}', {}, {})", search, first, pageSize);
+			logger.debug("google('{}', {}, {}, '{}')", search, first, pageSize, index);
 
 		long totalHits = -1;
 		long took = -1;
@@ -73,7 +73,7 @@ public class SearchService {
 
 		org.elasticsearch.action.search.SearchResponse searchHits = esClient
 				.prepareSearch()
-                .setIndices(getSearchableIndexes())
+                .setIndices(index)
                 .setTypes(getSearchableTypes())
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH).setQuery(qb)
 				.setFrom(first).setSize(pageSize)

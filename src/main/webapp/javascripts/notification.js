@@ -1,6 +1,6 @@
 /**
  * Notices
- * Contains 
+ * Contains
  *	type: CSS class for bootstrap alerts: {<none>, alert-success, alert-info, alert-error}
  *	title: notification title
  * 	message: detail message
@@ -23,7 +23,7 @@ var showNotice = function(notice) {
 		title = '<strong>'+notice.title+'</strong><br />';
 	}
 	var message = notice.message;
-	
+
 	var html = '<div class="alert'+type+'"><a class="close" data-dismiss="alert" href="#">×</a>'+title + message +'</div>';
 	$("#notices").append(html);
 	$("#notices").show().delay(5000).hide('slow'); // Hide after 5s
@@ -31,7 +31,7 @@ var showNotice = function(notice) {
 
 /**
  * Notifications
- * Contains 
+ * Contains
  *	icon: relative path to an image
  *	title: notification title
  * 	message: detail message
@@ -64,7 +64,7 @@ var showNotification = function(notification) {
 				window.webkitNotifications.createNotification(icon, title, message);
 			} else {
 				// :(
-				showNotificationDialog(icon, title, message);		
+				showNotificationDialog(icon, title, message);
 			}
 		}
 	} else {
@@ -100,7 +100,7 @@ var showRestError = function(json) {
 	if ($.isArray(json.errors)) {
 		msg = json.errors.join('<br>');
 	} else {
-		msg = errors;
+		msg = error;
 	}
 	showNotification({
 		icon: "img/error.png",

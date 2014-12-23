@@ -44,7 +44,7 @@ public class SearchApi extends CommonBaseApi {
 
 	@Autowired
 	protected SearchService searchService;
-	
+
 
 	@Override
 	public Api[] helpApiList() {
@@ -52,12 +52,12 @@ public class SearchApi extends CommonBaseApi {
 		apis[0] = new Api("/1/search", "POST", "Search for documents");
 		return apis;
 	}
-	
+
 	@Override
 	public String helpMessage() {
 		return "The /1/search API helps you to search your documents.";
 	}
-	
+
 	/**
 	 * Search for documents
 	 * @param query
@@ -68,11 +68,11 @@ public class SearchApi extends CommonBaseApi {
 	RestResponseSearchResponse term(@RequestBody SearchQuery query) {
 		SearchResponse results = null;
 		try {
-			results = searchService.google(query.getSearch(), query.getFirst(), query.getPageSize());
+			results = searchService.google(query.getSearch(), query.getFirst(), query.getPageSize(), query.getIndex());
 		} catch (Exception e) {
 			return new RestResponseSearchResponse(new RestAPIException(e));
 		}
-		
+
 		RestResponseSearchResponse response = new RestResponseSearchResponse(results);
 		return response;
 	}
@@ -82,15 +82,15 @@ public class SearchApi extends CommonBaseApi {
 	 * @param term
 	 * @return
 	 */
-	@RequestMapping(value = "{term}", method = RequestMethod.GET)
-	public @ResponseBody RestResponseSearchResponse search(@PathVariable final String term) throws Exception {
+	@RequestMapping(value = "{index}/{term}", method = RequestMethod.GET)
+	public @ResponseBody RestResponseSearchResponse search(@PathVariable String index, @PathVariable final String term) throws Exception {
 		SearchResponse results = null;
 		try {
-			results = searchService.google(term, 0, 10);
+			results = searchService.google(term, 0, 10, index);
 		} catch (Exception e) {
 			return new RestResponseSearchResponse(new RestAPIException(e));
 		}
-		
+
 		RestResponseSearchResponse response = new RestResponseSearchResponse(results);
 		return response;
 	}

@@ -4,16 +4,23 @@ import java.io.Serializable;
 
 public class SearchQuery implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	protected String search;
-	protected int first; 
+	protected int first;
 	protected int pageSize;
+    protected String index;
 	/**
 	 * @return the search
 	 */
 	public String getSearch() {
 		return search;
 	}
+    /**
+     * @return the search
+     */
+    public String getIndex() {
+        return index;
+    }
 	/**
 	 * @param search the search to set
 	 */
@@ -44,7 +51,7 @@ public class SearchQuery implements Serializable {
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
-	
-	
+
+
 
 }

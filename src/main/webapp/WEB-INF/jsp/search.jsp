@@ -17,7 +17,7 @@
 		<jsp:include page="search-results.jsp" />
 	</div>
 	<%-- Upload Dialog --%>
-	<jsp:include page="upload.jsp" />
+	<%--<jsp:include page="upload.jsp" />--%>
 
 	<%-- Notifications --%>
 	<jsp:include page="notifications.jsp" />
@@ -33,6 +33,8 @@
 	<script src="javascripts/lib/jquery.fileupload.js" type="text/javascript"></script>
 	<script src="javascripts/lib/jquery.fileupload-ui.js" type="text/javascript"></script>
     <script src="javascripts/lib/dropzone.js"></script>
+    <script src="javascripts/config.js" type="text/javascript"></script>
+    <script src="javascripts/indexes.js" type="text/javascript"></script>
 
 	<script src="javascripts/utils.js" type="text/javascript"></script>
 	<script src="javascripts/notification.js" type="text/javascript"></script>
