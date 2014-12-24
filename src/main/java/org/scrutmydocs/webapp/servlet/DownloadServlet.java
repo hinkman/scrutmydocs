@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.scrutmydocs.webapp.servlet;
 
@@ -8,6 +8,8 @@ import org.apache.lucene.util.IOUtils;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.bytes.BytesArray;
+import org.elasticsearch.common.logging.ESLogger;
+import org.elasticsearch.common.logging.Loggers;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -22,7 +24,7 @@ import java.io.IOException;
 
 /**
  * Download Document Servlet
- * 
+ *
  * @author laborie
  */
 public class DownloadServlet extends HttpServlet {
@@ -36,6 +38,8 @@ public class DownloadServlet extends HttpServlet {
 	/** The ES client. */
 	private Client client;
 
+    private ESLogger logger = Loggers.getLogger(getClass().getName());
+
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -47,26 +51,33 @@ public class DownloadServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String id = req.getParameter("id");
 		String index = req.getParameter("index");
-        String contentType = req.getParameter("content_type");
+//        String contentType = req.getParameter("content_type");
 		Client client = this.getClient();
 
 		GetResponse responseEs = client.prepareGet()
                 .setIndex(index).setId(id)
                 .setFields(
-                        FsRiverUtil.Doc.ATTACHMENT,
-                        FsRiverUtil.Doc.META + "." + FsRiverUtil.Doc.Meta.TITLE)
-                .get();
-		if(responseEs.isExists()) {
+                        "content",
+                        "file.filename",
+                        "file.content_type")
+                .execute().actionGet();
+
+        if(responseEs.isExists()) {
 			// Write into stream...
 			ServletOutputStream out = resp.getOutputStream();
 			try {
-				String name = (String) responseEs.getField(FsRiverUtil.Doc.META + "." + FsRiverUtil.Doc.Meta.TITLE).getValue();
-				BytesArray content = (BytesArray) responseEs.getField(FsRiverUtil.Doc.ATTACHMENT).getValue();
+                String contentType = (String) responseEs.getField("file.content_type").getValue();
+				String name = (String) responseEs.getField("file.filename").getValue();
+				String content = (String) responseEs.getField("content").getValue();
 
-				resp.setContentType(contentType);
+				resp.setHeader("Content-type", contentType);
 				resp.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", name));
-				out.write(content.toBytes());
+                if (logger.isDebugEnabled())
+                    logger.debug("download('{}','{}')", contentType, name);
+				out.write(content.getBytes());
 			} finally {
+                if (logger.isDebugEnabled())
+                    logger.debug("download('exception')");
                 IOUtils.closeWhileHandlingException(out);
 			}
 		} else {
@@ -76,7 +87,7 @@ public class DownloadServlet extends HttpServlet {
 
 	/**
 	 * Gets the client.
-	 * 
+	 *
 	 * @return the client
 	 */
 	private synchronized Client getClient() {

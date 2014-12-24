@@ -100,12 +100,13 @@ public class SearchService {
             if (searchHit.getFields() != null) {
                 if (searchHit.getFields().get("file.content_type") != null) {
                     hit.setContentType((String) searchHit.getFields().get("file.content_type").getValue());
+//                    hit.setContentType((String) "application/octet-stream");
                 }
             }
 
             if (searchHit.getSource() != null) {
                 hit.setTitle(AbstractRiverHelper.getSingleStringValue(
-                        "meta.title",
+                        "file.filename",
                         searchHit.getSource()));
             }
 
@@ -170,7 +171,6 @@ public class SearchService {
     public String[] getSearchableIndexes(){
         List<String> indexList = new ArrayList<String>();
 //        indexList.add(INDEX_NAME);
-//        indexList.add("haha");
 
         org.elasticsearch.action.search.SearchResponse searchHits = esClient
                 .prepareSearch()
