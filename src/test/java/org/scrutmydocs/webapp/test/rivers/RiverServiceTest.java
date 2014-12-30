@@ -33,31 +33,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class RiverServiceTest extends AbstractConfigurationTest {
 
 	@Autowired RiverService riverService;
-	
+
 	@Test public void test_add_river() throws InterruptedException {
 		Assert.assertNotNull(riverService);
 
 		FSRiver fsriver = new FSRiver("mytestriver", SMDSearchProperties.INDEX_NAME,
                 SMDSearchProperties.INDEX_TYPE_DOC, "tmp",
                 FsRiver.PROTOCOL.LOCAL, null, null, null,
-                "/tmp_es", 30L, null, null, "standard", false);
+                "/tmp_es", 30L, null, null, "standard", false, true);
 
 		riverService.start(fsriver, new FSRiverHelper().toXContent(fsriver));
 	}
-	
+
 	@Test public void test_remove_river() throws InterruptedException {
 		Assert.assertNotNull(riverService);
 
 		FSRiver fsriver = new FSRiver("mytestriver", SMDSearchProperties.INDEX_NAME,
                 SMDSearchProperties.INDEX_TYPE_DOC, "tmp",
                 FsRiver.PROTOCOL.LOCAL, null, null, null,
-                "/tmp_es", 30L, null, null, "standard", false);
+                "/tmp_es", 30L, null, null, "standard", false,true);
 
 		riverService.start(fsriver, new FSRiverHelper().toXContent(fsriver));
-		
+
 		// We have to wait for 1s
 		Thread.sleep(1000);
-		
+
 		riverService.stop(fsriver);
 	}
 

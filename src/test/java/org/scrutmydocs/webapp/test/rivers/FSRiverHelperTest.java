@@ -52,21 +52,21 @@ public class FSRiverHelperTest {
   "type" : "fs"
 }
 </pre>
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Test public void test_tofsriver() throws IOException {
 		FSRiver model = new FSRiver("tmp", SMDSearchProperties.INDEX_NAME,
 				SMDSearchProperties.INDEX_TYPE_DOC, "tmp",
                 FsRiver.PROTOCOL.LOCAL, "localhost", "login", "password",
-                "/tmp_es", 30L, "*.doc,*.pdf", "resume.*", "standard", false);
-		
+                "/tmp_es", 30L, "*.doc,*.pdf", "resume.*", "standard", false, true);
+
 		XContentBuilder xb = new FSRiverHelper().toXContent(model);
 		String jsonContent = xb.string();
 
 		Map<String, Object> map = XContentHelper.convertToMap(jsonContent.getBytes(), 0, jsonContent.length(), false).v2();
-		
+
 		FSRiver fsriver = new FSRiverHelper().toRiver(new FSRiver(), map);
-		
+
 		Assert.assertEquals(model.getType(), fsriver.getType());
         Assert.assertEquals(model.getProtocol(), fsriver.getProtocol());
         Assert.assertEquals(model.getServer(), fsriver.getServer());

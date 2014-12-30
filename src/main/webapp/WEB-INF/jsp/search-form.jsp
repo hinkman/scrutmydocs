@@ -17,7 +17,10 @@
                     <select id="indexlistselect" name="ils" class="search-query span2">
                         <option id="index-today" selected>Today</option>
                     </select>
-                    <input id="indexlistquery" name="q" type="text" class="span5">
+                    <select id="typelistselect" name="tls" class="search-query span1">
+                        <option id="type-all" selected>&nbsp;</option>
+                    </select>
+                    <input id="indexlistquery" name="q" type="text" class="span4">
                     <input id="noindexlistquery" name="q" type="text" class="search-query span7">
                     <button type="submit" class="btn btn-primary"><i class="icon-white icon-search"></i></button>
                     <%--<div id="loading"><img src="img/loading.gif"/></div>--%>

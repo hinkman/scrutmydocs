@@ -33,12 +33,13 @@ import org.scrutmydocs.webapp.util.StringTools;
  */
 public class AbstractFSRiver extends BasicRiver {
 	private static final long serialVersionUID = 1L;
-	
+
 	private String url;
 	private Long updateRate;
 	private String includes;
 	private String excludes;
 	private String analyzer;
+    private boolean storeSource;
 
 	/**
 	 * We implement here a "abstractfs" river
@@ -51,7 +52,7 @@ public class AbstractFSRiver extends BasicRiver {
 	public AbstractFSRiver() {
 		this("tmp", "/tmp", 60L);
 	}
-	
+
 	/**
 	 * @param id The unique id of this river
 	 * @param url URL where to fetch content
@@ -62,6 +63,7 @@ public class AbstractFSRiver extends BasicRiver {
 		this.url = url;
 		this.updateRate = updateRate;
 		this.analyzer = "standard";
+        this.storeSource = true;
 	}
 
 
@@ -76,8 +78,8 @@ public class AbstractFSRiver extends BasicRiver {
 	 * @param started Is the river already started ?
 	 */
 	public AbstractFSRiver(String id, String indexname, String typename, String name,
-			String url, Long updateRate, String analyzer, boolean started) {
-		this(id, indexname, typename, name, url, updateRate, null, null, analyzer, started);
+			String url, Long updateRate, String analyzer, boolean started, boolean storeSource) {
+		this(id, indexname, typename, name, url, updateRate, null, null, analyzer, started, storeSource);
 	}
 
 	/**
@@ -93,13 +95,14 @@ public class AbstractFSRiver extends BasicRiver {
 	 * @param started Is the river already started ?
 	 */
 	public AbstractFSRiver(String id, String indexname, String typename, String name,
-			String url, Long updateRate, String includes, String excludes, String analyzer, boolean started) {
+			String url, Long updateRate, String includes, String excludes, String analyzer, boolean started, boolean storeSource) {
 		super(id, indexname, typename, name, started);
 		this.url = url;
 		this.updateRate = updateRate;
 		this.includes = includes;
 		this.excludes = excludes;
 		this.analyzer = analyzer;
+        this.storeSource = storeSource;
 	}
 
 	/**
@@ -108,21 +111,21 @@ public class AbstractFSRiver extends BasicRiver {
 	public String getUrl() {
 		return url;
 	}
-	
+
 	/**
 	 * @param url URL where to fetch content
 	 */
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
 	/**
 	 * @return Update Rate (in seconds)
 	 */
 	public Long getUpdateRate() {
 		return updateRate;
 	}
-	
+
 	/**
 	 * @param updateRate Update Rate (in seconds)
 	 */
@@ -131,20 +134,34 @@ public class AbstractFSRiver extends BasicRiver {
 	}
 
 	/**
-	 * @return Include list (comma separator)
+	 * @return storeSource
 	 */
-	public String getIncludes() {
-		return includes;
+	public boolean getStoreSource() {
+		return storeSource;
 	}
 
 	/**
-	 * @param includes Include list (comma separator)
+	 * @param storeSource store attachments
 	 */
-	public void setIncludes(String includes) {
-		this.includes = includes;
+	public void setStoreSource(boolean storeSource) {
+		this.storeSource = storeSource;
 	}
 
-	/**
+    /**
+     * @return Include list (comma separator)
+     */
+    public String getIncludes() {
+        return includes;
+    }
+
+    /**
+     * @param includes Include list (comma separator)
+     */
+    public void setIncludes(String includes) {
+        this.includes = includes;
+    }
+
+    /**
 	 * @return Exclude list (comma separator)
 	 */
 	public String getExcludes() {
@@ -165,7 +182,7 @@ public class AbstractFSRiver extends BasicRiver {
 	public void setAnalyzer(String analyzer) {
 		this.analyzer = analyzer;
 	}
-	
+
 	@Override
 	public String toString() {
 		return StringTools.toString(this);

@@ -5,7 +5,7 @@ var initIndexes = function() {
         $("#noindexlistquery").hide();
 
         // Fetch index list
-        $.getJSON("http://localhost:9200/_mapping/doc",function(json) {
+        $.getJSON("http://" + config.elasNode + ":9200/_mapping/" + config.onlyIndexesWithTypes.toString(),function(json) {
 //            // Handle errors
 //            if (!json.ok) {
 //                showRestError(json);
@@ -20,8 +20,16 @@ var initIndexes = function() {
                 $('<option id="index-'+index+'" value="'+index+'">'+index+'</option>').insertAfter("#index-today")
             });
         });
+
+        $.each(config.onlyIndexesWithTypes, function(index) {
+            $('<option id="type-'+config.onlyIndexesWithTypes[index]+'" value="'+config.onlyIndexesWithTypes[index]+'">'
+                +config.onlyIndexesWithTypes[index]+'</option>').insertBefore("#type-all")
+        });
+        $("#type-all").remove();
+
     } else {
         $("#indexlistselect").hide();
+        $("#typelistselect").hide();
         $("#indexlistquery").hide();
     }
 }

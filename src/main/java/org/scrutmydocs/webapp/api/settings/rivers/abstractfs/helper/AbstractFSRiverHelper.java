@@ -36,10 +36,10 @@ public abstract class AbstractFSRiverHelper<T extends AbstractFSRiver> extends A
 	 * @param xcb
 	 * @param river
 	 * @return xcb if you don't have specific metadata to add
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public abstract XContentBuilder addFSMeta(XContentBuilder xcb, T river) throws IOException;
-	
+
 	/**
 	 * Parse the json content to fill your specific metadata
 	 * @param river Your river object
@@ -47,7 +47,7 @@ public abstract class AbstractFSRiverHelper<T extends AbstractFSRiver> extends A
 	 * @return river if you don't have any specific metadata
 	 */
 	public abstract T parseFSMeta(T river, Map<String, Object> content);
-	
+
 	/**
 	 * We manage :
 	 * <ul>
@@ -62,13 +62,14 @@ public abstract class AbstractFSRiverHelper<T extends AbstractFSRiver> extends A
 	public XContentBuilder addMeta(XContentBuilder xcb, T river) throws IOException {
 		// We add specific metadata here
 		xcb = addFSMeta(xcb, river);
-		
-		xcb	
+
+		xcb
 			.field("url", river.getUrl())
 			.field("update_rate", river.getUpdateRate() * 1000)
 			.field("includes", river.getIncludes())
 			.field("excludes", river.getExcludes())
-			.field("analyzer", river.getAnalyzer());
+			.field("analyzer", river.getAnalyzer())
+            .field("store_source", river.getStoreSource());
 
 		return xcb;
 	}
@@ -77,7 +78,7 @@ public abstract class AbstractFSRiverHelper<T extends AbstractFSRiver> extends A
 	/**
 	 * We build "abstractfs" rivers.
 	 */
-	@Override abstract public String type(); 
+	@Override abstract public String type();
 
 	/**
 	 * We manage :
@@ -96,7 +97,7 @@ public abstract class AbstractFSRiverHelper<T extends AbstractFSRiver> extends A
 	  "name" : "tmp",
 	  "url" : "/tmp_es",
 	  "includes" : "*.doc,*.pdf",
-	  "excludes" : "resume.*",
+      "store_source" : true,
   },
   "index" : {
 	  "index" : "docs",
@@ -112,20 +113,21 @@ abstractfs will be replaced by your {@link #type()} content.
 	public T parseMeta(T river, Map<String, Object> content) {
 		// We parse specific FS metadata depending on the FS river type
 		river = parseFSMeta(river, content);
-				
+
 		river.setUrl(getSingleStringValue(type() + ".url", content));
 		river.setUpdateRate(getSingleLongValue(type() + ".update_rate", content) / 1000);
 
 		// TODO Manage includes/excludes when arrays
 		river.setIncludes(getSingleStringValue(type() + ".includes", content));
 		river.setExcludes(getSingleStringValue(type() + ".excludes", content));
-		
-		river.setAnalyzer(getSingleStringValue(type() + ".analyzer", content));
-		
-		return river;
-	}	
 
-	
+		river.setAnalyzer(getSingleStringValue(type() + ".analyzer", content));
+        river.setStoreSource(getSingleBooleanValue(type() + ".store_source", content));
+
+		return river;
+	}
+
+
 	/**
 	 * Build a river mapping for FS
 	 * @param river FSRiver used to generate mapping

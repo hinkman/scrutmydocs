@@ -48,7 +48,7 @@ public class FSRiver extends AbstractFSRiver {
 	public FSRiver() {
 		this("tmp", "/tmp", 60L);
 	}
-	
+
 	/**
 	 * @param id The unique id of this river
 	 * @param url URL where to fetch content
@@ -76,11 +76,12 @@ public class FSRiver extends AbstractFSRiver {
 	 * @param excludes Exclude list (comma separator)
 	 * @param analyzer Analyzer to use
 	 * @param started Is the river already started ?
+     * @param storeSource store attachments ?
 	 */
 	public FSRiver(String id, String indexname, String typename, String name,
 			String server, String protocol, String username, String password,
-            String url, Long updateRate, String includes, String excludes, String analyzer, boolean started) {
-		super(id, indexname, typename, name, url, updateRate, includes, excludes, analyzer, started);
+            String url, Long updateRate, String includes, String excludes, String analyzer, boolean started, boolean storeSource) {
+		super(id, indexname, typename, name, url, updateRate, includes, excludes, analyzer, started, storeSource);
         this.protocol = protocol;
         this.server = server;
         this.username = username;

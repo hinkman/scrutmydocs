@@ -5,6 +5,7 @@ var config = {
     // result in index drop-down on main page
     // Default: false
     useIndexes: true,
+    elasNode: '172.28.86.200',
 
     // This controls the scope of searches - more
     // accurately, the existence of the 'All' option
@@ -17,7 +18,7 @@ var config = {
     // to only indexes with these *types* of docs
     // in them.
     // Default: []
-    onlyIndexesWithTypes: ['docs'],
+    onlyIndexesWithTypes: ['gis','cyc'],
 
     // Display order for drop-down list. Possible
     // values are 'alphabetic' or 'creation_date'.

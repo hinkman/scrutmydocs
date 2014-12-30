@@ -36,7 +36,7 @@ import java.util.Collection;
 public class AdminFSRiverServiceTest extends AbstractConfigurationTest {
 
 	@Autowired AdminFSRiverService adminService;
-	
+
 	@Test public void test_add_river() throws InterruptedException {
 		Assert.assertNotNull(adminService);
 
@@ -44,18 +44,18 @@ public class AdminFSRiverServiceTest extends AbstractConfigurationTest {
 				new FSRiver("mytestriver", SMDSearchProperties.INDEX_NAME,
 						SMDSearchProperties.INDEX_TYPE_DOC, "tmp",
                         FsRiver.PROTOCOL.LOCAL, null, null, null,
-                        "/tmp_es", 30L, null, null, "standard", false));
-		
+                        "/tmp_es", 30L, null, null, "standard", false, true));
+
 		client.prepareIndex(SMDSearchProperties.ES_META_INDEX, SMDSearchProperties.ES_META_RIVERS, "mytestriver").setSource(xb)
 				.execute().actionGet();
-		
+
 		// We have to refresh docs
         client.admin().indices().prepareRefresh(SMDSearchProperties.ES_META_INDEX).execute().actionGet();
-		
+
 		Collection<FSRiver> rivers = adminService.get();
 		Assert.assertEquals("Rivers should not be empty", 1, rivers.size());
 	}
-	
+
 	@Test public void test_get_one_river() throws InterruptedException {
 		Assert.assertNotNull(adminService);
 
@@ -63,14 +63,14 @@ public class AdminFSRiverServiceTest extends AbstractConfigurationTest {
 				new FSRiver("mytestriver", SMDSearchProperties.INDEX_NAME,
 						SMDSearchProperties.INDEX_TYPE_DOC, "tmp",
                         FsRiver.PROTOCOL.LOCAL, null, null, null,
-                        "/tmp_es", 30L, null, null, "standard", false));
-		
+                        "/tmp_es", 30L, null, null, "standard", false, true));
+
 		client.prepareIndex(SMDSearchProperties.ES_META_INDEX, SMDSearchProperties.ES_META_RIVERS, "mytestriver").setSource(xb)
 				.execute().actionGet();
 
         // We have to refresh docs
         client.admin().indices().prepareRefresh(SMDSearchProperties.ES_META_INDEX).execute().actionGet();
-		
+
 		FSRiver fsriver = adminService.get("mytestriver");
 		Assert.assertNotNull("Rivers should exist", fsriver);
 	}

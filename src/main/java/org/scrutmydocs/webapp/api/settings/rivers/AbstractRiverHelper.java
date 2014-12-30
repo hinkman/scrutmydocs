@@ -30,21 +30,21 @@ import java.util.Map;
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 public abstract class AbstractRiverHelper<T extends BasicRiver> {
-	
+
 	/**
 	 * Implement this to add your specific river metadata
 	 * @param xcb
 	 * @param river
 	 * @return xcb if you don't have specific metadata to add
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public abstract XContentBuilder addMeta(XContentBuilder xcb, T river) throws IOException;
-	
+
 	/**
 	 * @return Type managed by this helper, fs, ...
 	 */
 	public abstract String type();
-	
+
 	/**
 	 * Parse the json content to fill your specific metadata
 	 * @param river Your river object
@@ -52,7 +52,7 @@ public abstract class AbstractRiverHelper<T extends BasicRiver> {
 	 * @return river if you don't have any specific metadata
 	 */
 	public abstract T parseMeta(T river, Map<String, Object> content);
-	
+
 	/**
 	 * Build a river definition
 	 * @param river The river definition
@@ -66,10 +66,10 @@ public abstract class AbstractRiverHelper<T extends BasicRiver> {
 						.field("type", river.getType())
 						.startObject(river.getType());
 
-			
+
 			// We add specific metadata here
 			xb = addMeta(xb, river);
-			
+
 			xb
 						.endObject()
 						.startObject("index")
@@ -79,11 +79,11 @@ public abstract class AbstractRiverHelper<T extends BasicRiver> {
 					.endObject();
 		} catch (IOException e) {
 			// TODO Log when error
-		}		
+		}
 		return xb;
 	}
-	
-	
+
+
 	/**
 	 * Build a river from a JSON definiton content such as :<pre>
 {
@@ -92,6 +92,7 @@ public abstract class AbstractRiverHelper<T extends BasicRiver> {
 	  "update_rate" : 30000,
 	  "name" : "tmp",
 	  "url" : "/tmp_es",
+      "store_source": true,
 	  "includes" : "*.doc,*.pdf",
 	  "excludes" : "resume.*",
   },
@@ -108,18 +109,18 @@ public abstract class AbstractRiverHelper<T extends BasicRiver> {
 	public T toRiver(T river, Map<String, Object> content) {
 		try {
 			// First we check that it's a type()
-			if (!content.containsKey("type")) 
+			if (!content.containsKey("type"))
 				throw new RuntimeException("Your River object should be a river and contain \"type\":\"rivertype\"");
-			
+
 			String type = XContentMapValues.nodeStringValue(content.get("type"), "");
-			
+
 			// Then we dig into type()
-			if (!content.containsKey(type)) 
+			if (!content.containsKey(type))
 				throw new RuntimeException("A River must contain \""+type+"\":{...}");
 
 			// We parse specific metadata depending on the river type
 			river = parseMeta(river, content);
-			
+
 			// Then we dig into index
 			if (content.containsKey("index")) {
 				river.setIndexname(getSingleStringValue("index.index", content));
@@ -128,18 +129,18 @@ public abstract class AbstractRiverHelper<T extends BasicRiver> {
 			}
 		} catch (Exception e) {
 			// TODO Log when error
-		}		
+		}
 		return river;
 	}
-	
+
 	public static String getSingleStringValue(String path, Map<String, Object> content) {
 		List<Object> obj = XContentMapValues.extractRawValues(path, content);
-		if(obj.isEmpty()) 
+		if(obj.isEmpty())
 			return null;
-		else 
+		else
 			return ((String) obj.get(0));
 	}
-	
+
 	public static Long getSingleLongValue(String path, Map<String, Object> content) {
 		List<Object> obj = XContentMapValues.extractRawValues(path, content);
 		return ((Integer) obj.get(0)).longValue();
@@ -147,10 +148,10 @@ public abstract class AbstractRiverHelper<T extends BasicRiver> {
 
 	public static Boolean getSingleBooleanValue(String path, Map<String, Object> content) {
 		List<Object> obj = XContentMapValues.extractRawValues(path, content);
-		if(obj.isEmpty()) 
+		if(obj.isEmpty())
 			return null;
-		else 
+		else
 			return ((Boolean) obj.get(0));
 	}
-	
+
 }

@@ -192,7 +192,9 @@ public class SearchService {
 
     public String[] getSearchableTypes(){
         List<String> typeList = new ArrayList<String>();
-        typeList.add(INDEX_TYPE_DOC);
+//        typeList.add(INDEX_TYPE_DOC);
+        typeList.add("gis");
+        typeList.add("cyc");
         String[] typeArr = new String[typeList.size()];
         typeArr = typeList.toArray(typeArr);
         return typeArr;
