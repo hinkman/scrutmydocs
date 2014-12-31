@@ -55,9 +55,9 @@ public class SearchService {
 
 	private ESLogger logger = Loggers.getLogger(getClass().getName());
 
-	public SearchResponse google(String search, int first, int pageSize, String index) {
+	public SearchResponse google(String search, int first, int pageSize, String index, String type) {
 		if (logger.isDebugEnabled())
-			logger.debug("google('{}', {}, {}, '{}')", search, first, pageSize, index);
+			logger.debug("google('{}', {}, {}, '{}', '{}')", search, first, pageSize, index, type);
 
 		long totalHits = -1;
 		long took = -1;
@@ -74,7 +74,7 @@ public class SearchService {
 		org.elasticsearch.action.search.SearchResponse searchHits = esClient
 				.prepareSearch()
                 .setIndices(index)
-                .setTypes(getSearchableTypes())
+                .setTypes(type)
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH).setQuery(qb)
 				.setFrom(first).setSize(pageSize)
                 .addHighlightedField("file.filename")
@@ -96,6 +96,8 @@ public class SearchService {
 			hit.setType(searchHit.getType());
 			hit.setId(searchHit.getId());
 			// hit.setSource(searchHit.getSourceAsString());
+//            if (logger.isDebugEnabled())
+//                logger.debug("google-hits('{}', '{}', '{}')", searchHit.getId(), searchHit.getIndex(), searchHit.getType());
 
             if (searchHit.getFields() != null) {
                 if (searchHit.getFields().get("file.content_type") != null) {
@@ -108,6 +110,11 @@ public class SearchService {
                 hit.setTitle(AbstractRiverHelper.getSingleStringValue(
                         "file.filename",
                         searchHit.getSource()));
+//                if (logger.isDebugEnabled())
+//                    logger.debug("google-source(title '{}')",hit.getTitle());
+//            } else {
+//                if (logger.isDebugEnabled())
+//                    logger.debug("google-source(getSource is null)");
             }
 
 

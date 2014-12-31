@@ -18,7 +18,7 @@ var config = {
     // to only indexes with these *types* of docs
     // in them.
     // Default: []
-    onlyIndexesWithTypes: ['gis','cyc'],
+    onlyIndexesWithTypes: ['gis','cyc','hub'],
 
     // Display order for drop-down list. Possible
     // values are 'alphabetic' or 'creation_date'.

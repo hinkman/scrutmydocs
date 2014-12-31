@@ -9,6 +9,7 @@ public class SearchQuery implements Serializable {
 	protected int first;
 	protected int pageSize;
     protected String index;
+    protected String type;
 	/**
 	 * @return the search
 	 */
@@ -16,17 +17,35 @@ public class SearchQuery implements Serializable {
 		return search;
 	}
     /**
-     * @return the search
+     * @param search the search to set
+     */
+    public void setSearch(String search) {
+        this.search = search;
+    }
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+    /**
+     * @param type the first to set
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+    /**
+     * @return the index
      */
     public String getIndex() {
         return index;
     }
-	/**
-	 * @param search the search to set
-	 */
-	public void setSearch(String search) {
-		this.search = search;
-	}
+    /**
+     * @param index the first to set
+     */
+    public void setIndex(String index) {
+        this.index = index;
+    }
 	/**
 	 * @return the first
 	 */

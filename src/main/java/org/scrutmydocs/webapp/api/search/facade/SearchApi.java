@@ -68,7 +68,7 @@ public class SearchApi extends CommonBaseApi {
 	RestResponseSearchResponse term(@RequestBody SearchQuery query) {
 		SearchResponse results = null;
 		try {
-			results = searchService.google(query.getSearch(), query.getFirst(), query.getPageSize(), query.getIndex());
+			results = searchService.google(query.getSearch(), query.getFirst(), query.getPageSize(), query.getIndex(), query.getType());
 		} catch (Exception e) {
 			return new RestResponseSearchResponse(new RestAPIException(e));
 		}
@@ -82,11 +82,11 @@ public class SearchApi extends CommonBaseApi {
 	 * @param term
 	 * @return
 	 */
-	@RequestMapping(value = "{index}/{term}", method = RequestMethod.GET)
-	public @ResponseBody RestResponseSearchResponse search(@PathVariable String index, @PathVariable final String term) throws Exception {
+	@RequestMapping(value = "{index}/{type}/{term}", method = RequestMethod.GET)
+	public @ResponseBody RestResponseSearchResponse search(@PathVariable String index, @PathVariable String type, @PathVariable final String term) throws Exception {
 		SearchResponse results = null;
 		try {
-			results = searchService.google(term, 0, 10, index);
+			results = searchService.google(term, 0, 10, index, type);
 		} catch (Exception e) {
 			return new RestResponseSearchResponse(new RestAPIException(e));
 		}

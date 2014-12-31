@@ -71,7 +71,7 @@ public class DownloadServlet extends HttpServlet {
 				String content = (String) responseEs.getField("content").getValue();
 
 				resp.setHeader("Content-type", contentType);
-				resp.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", name));
+//				resp.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", name));
                 if (logger.isDebugEnabled())
                     logger.debug("download('{}','{}')", contentType, name);
 				out.write(content.getBytes());

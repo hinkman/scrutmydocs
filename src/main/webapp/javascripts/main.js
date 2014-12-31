@@ -32,21 +32,23 @@ var searchSize=10;
 var doSearch = function(e) {
 	var query = $("input[name=q]").val();
     var indexname = $("select[name=ils]").val();
+    var typename = $("select[name=tls]").val();
 //    console.log(indexname+'   '+query);
-	doSearchPage(indexname,query,0);
+	doSearchPage(indexname,typename,query,0);
 
 	// stop the event
 	e.preventDefault();
 	return false;
 };
 var lastData;
-var doSearchPage = function(index, query, from) {
+var doSearchPage = function(index, type, query, from) {
 	// Parameters
 	var data ={
 		first: from,
 		pageSize: searchSize,
 		search: query,
-        index: index
+        index: index,
+        type: type
 	};
 	// Rest
 	lastData = data;
@@ -74,6 +76,7 @@ var handleSearchResults = function(data) {
 	// Display search info
 	var total =json.totalHits;
 	$("#result").empty();
+//    console.log('resutl total" '+total);
 	if(total > 1) {
 		$("#result").append('<span class="badge">'+ total +'</span> documents found in <span class="badge">'+json.took+'</span> milliseconds');
         $("#results-row").show();
@@ -140,10 +143,12 @@ var handleSearchResults = function(data) {
 			} else {
 				title = hit.id;
 			}
-			if (hit.type==="doc") {
+//			if (hit.type==="doc") {
                 link = '<a target="_blank" href="download?id='+hit.id+'&index='+hit.index+'&content_type=' +
-                    contentType +'">' +icon+ title+'</a>';
-			}
+                    contentType +'" onclick="window.open("' + "'','_new').location.href=this.href; return false;" + '">' +icon+ title+'</a>';
+//                link = '<a target="_blank" href="javascript:" onclick="var w=window.open(' + "'download?id="+hit.id+'&index='+hit.index+'&content_type=' +
+//                    contentType + "'" + '); w.document.title = "testing"; return false">' +icon+ title+'</a>';
+//			}
 			if (hit.highlights) {
 				// add highlight
 				link += '<blockquote>' +hit.highlights.join('<br>')+ '</blockquote>';
