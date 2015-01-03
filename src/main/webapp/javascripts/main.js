@@ -145,7 +145,9 @@ var handleSearchResults = function(data) {
 			}
 //			if (hit.type==="doc") {
                 link = '<a target="_blank" href="download?id='+hit.id+'&index='+hit.index+'&content_type=' +
-                    contentType +'" onclick="window.open("' + "'','_new').location.href=this.href; return false;" + '">' +icon+ title+'</a>';
+                    contentType +'">' +icon+ title+'</a>';
+//            link = '<a target="_blank" href="download?id='+hit.id+'&index='+hit.index+'&content_type=' +
+//                contentType +'" onclick="window.open("' + "'','_new').location.href=this.href; return false;" + '">' +icon+ title+'</a>';
 //                link = '<a target="_blank" href="javascript:" onclick="var w=window.open(' + "'download?id="+hit.id+'&index='+hit.index+'&content_type=' +
 //                    contentType + "'" + '); w.document.title = "testing"; return false">' +icon+ title+'</a>';
 //			}

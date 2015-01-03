@@ -10,8 +10,9 @@
             <a class="brand" href="index.jsp">ScrutMyDocs</a>
             <div class="nav-collapse collapse">
                 <ul class="nav pull-right">
-                    <li class=""><a data-toggle="modal" href="#diaUpload"><i class="icon-white icon-upload"></i> Upload</a></li>
-                    <li class=""><a href="settings.jsp"><i class="icon-white icon-cog"></i> Settings</a></li>
+                    <%--<li class=""><a data-toggle="modal" href="#diaUpload"><i class="icon-white icon-upload"></i> Upload</a></li>--%>
+                    <%--<li class=""><a href="settings.jsp"><i class="icon-white icon-cog"></i> Settings</a></li>--%>
+                    <li class="">&nbsp;</li>
                 </ul>
             </div>
         </div>

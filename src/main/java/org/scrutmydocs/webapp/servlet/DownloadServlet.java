@@ -20,6 +20,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 /**
@@ -57,23 +60,29 @@ public class DownloadServlet extends HttpServlet {
 		GetResponse responseEs = client.prepareGet()
                 .setIndex(index).setId(id)
                 .setFields(
-                        "content",
+//                        "content",
                         "file.filename",
-                        "file.content_type")
+                        "file.content_type",
+                        "path.real")
                 .execute().actionGet();
 
         if(responseEs.isExists()) {
 			// Write into stream...
 			ServletOutputStream out = resp.getOutputStream();
-			try {
                 String contentType = (String) responseEs.getField("file.content_type").getValue();
 				String name = (String) responseEs.getField("file.filename").getValue();
-				String content = (String) responseEs.getField("content").getValue();
+                String path = (String) responseEs.getField("path.real").getValue();
+//            String path = "file:///Users/hinkman/haha/dtrace_dbw3.out";
+                if (logger.isDebugEnabled())
+                    logger.debug("download('{}', '{}', '{}','{}','{}')", id, index, contentType, name, path);
+//				String content = (String) responseEs.getField("content").getValue();
+//                byte[] encoded = Files.readAllBytes((Path) responseEs.getField("file.path.real").getValue());
+//                String content = new String(Files.readAllBytes(path));
+            String content = new String(Files.readAllBytes(Paths.get(path)));
 
+            try {
 				resp.setHeader("Content-type", contentType);
 //				resp.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", name));
-                if (logger.isDebugEnabled())
-                    logger.debug("download('{}','{}')", contentType, name);
 				out.write(content.getBytes());
 			} finally {
                 if (logger.isDebugEnabled())
