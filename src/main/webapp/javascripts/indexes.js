@@ -16,7 +16,7 @@ var initIndexes = function() {
         }
 
         $("#noindexlistquery").hide();
-        $("#index-today").replaceWith('<option id="index-today" value="' + yyyy + '-' + mm + '-' + dd + '" selected>Today</option>');
+        $("#index-today").replaceWith('<option id="index-today" value="' + yyyy + '-' + mm + '-' + dd + '-docs' + '" selected>Today</option>');
 
         // Fetch index list
         $.getJSON("http://" + config.elasNode + ":9200/_mapping/" + config.onlyIndexesWithTypes.toString(),function(json) {
@@ -33,7 +33,8 @@ var initIndexes = function() {
 //                console.log(index+'   '+docindex);
 //                $('<li id="river-fs-'+fsriver.id+'"><a href="#"><i class="icon-folder-open"></i> '+fsriver.name+status+'</a></li>')
 //                    .insertAfter("#rivers-fs")
-                $('<option id="index-'+index+'" value="'+index+'">'+index+'</option>').insertAfter("#index-today")
+                var indexdisplay=index.replace('-docs','');
+                $('<option id="index-'+index+'" value="'+index+'">'+indexdisplay+'</option>').insertAfter("#index-today")
             });
         });
 
