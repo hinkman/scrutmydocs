@@ -172,6 +172,7 @@ var handleSearchResults = function(data) {
 	}
 	// nbPage
 	var nbPage = Math.ceil(total/searchSize);
+    if (nbPage>10) { nbPage=10; }
 	for (var i=1; i<=nbPage; i++) {
 		if(((i-1)*searchSize)==from) {
 			pages.append('<li class="disabled"><a href="#">'+i+'</a></li>');
@@ -193,11 +194,11 @@ var changePage = function(e) {
 	if (!parent.hasClass("active") && !parent.hasClass("disabled")) {
 		var txt = $(this).children("a").text();
 		if (txt == "Next") {
-			doSearchPage(lastData.search, lastData.first + searchSize);
+			doSearchPage(lastData.index, lastData.type, lastData.search, lastData.first + searchSize);
 		} else if (txt == "Prev"){
-			doSearchPage(lastData.search, lastData.first - searchSize);
+			doSearchPage(lastData.index, lastData.type, lastData.search, lastData.first - searchSize);
 		} else {
-			doSearchPage(lastData.search, searchSize * (parseInt(txt)-1) );
+			doSearchPage(lastData.index, lastData.type, lastData.search, searchSize * (parseInt(txt)-1) );
 		}
 	}
 
